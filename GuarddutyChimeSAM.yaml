@@ -1,0 +1,33 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: "AWS::Serverless-2016-10-31"
+Parameters:
+  HookURL:
+    Type: String
+    Description: Please enter the FULL webhook URL (click copy from Chime)
+    NoEcho: true
+  SeveritySetting:
+    Type: String
+    Description: What is the lowest severity level you want published (0.0-3.9 Low;  4.0-6.9 Medium; 7.0-8.9 High)
+    Default: 4.0    
+Resources:
+  ChimeNotifierLambdaFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      #Policies: AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          CHIMEWEBHOOK : !Ref HookURL
+          SEVERITY : !Ref SeveritySetting
+      CodeUri: s3://errose/guardduty-chime/index.zip
+      Runtime: nodejs6.10
+      Events:
+        CloudWatchEventRule:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern:
+              source:
+              - aws.guardduty
+              detail-type:
+              - GuardDuty Finding
