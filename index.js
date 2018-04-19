@@ -18,7 +18,7 @@ exports.handler = (event, context, callback) => {
                                                 callback(`Error: ${e.message}`);
                                               });
                               req.write(JSON.stringify({
-                                                Content: `${event.detail.accountId} ${event.region} : ${event.detail.title} https://https://console.aws.amazon.com/guardduty/home?region=${event.region}#/findings?search=id%3D${event.detail.id}`
+                                                Content: `${event.detail.accountId} ${event.region} : ${event.detail.title} https://console.aws.amazon.com/guardduty/home?region=${event.region}#/findings?search=id%3D${event.detail.id}`
                                               }));
                               req.end();
                             }
